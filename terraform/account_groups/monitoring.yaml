@@ -1,3 +1,5 @@
 groups:
   global:
-    ou: Infra 
+    ou: Infra
+    tags:
+      dev: true
