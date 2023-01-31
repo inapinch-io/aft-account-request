@@ -2,27 +2,26 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 locals {
-  account_groups = { for path in fileset(path.module, "account_groups/*.yaml") : regex("account_groups/([\\w-]+)\\.yaml", path)[0] => yamldecode(file(path)) }
-  all_accounts = {for value in flatten([for k,v in local.account_groups: [for group in lookup(v, "groups", ["global"]): merge({name = "${k}-${group}"}, v)]]): value["name"] => value}
+  accounts = { for path in fileset(path.module, "accounts/*.yaml") : regex("accounts/([\\w-]+)\\.yaml", path)[0] => yamldecode(file(path)) }
 }
 
 module "requests" {
-  for_each = local.all_accounts
+  for_each = local.accounts
   source = "./modules/aft-account-request"
 
   control_tower_parameters = {
-    AccountEmail = join("", ["info+", each.key, "@inapinch.io"])
+    AccountEmail = lookup(each.value, "email", join("", ["info+", each.key, "@inapinch.io"]))
     AccountName  = each.key
     ManagedOrganizationalUnit = lookup(each.value, "ou", "Workloads")
-    SSOUserEmail     = "info@inapinch.io"
-    SSOUserFirstName = "Ina"
-    SSOUserLastName  = "Pinch"
+    SSOUserEmail     = lookup(each.value, "sso_email", "info@inapinch.io")
+    SSOUserFirstName = lookup(each.value, "sso_first_name", "Ina")
+    SSOUserLastName  = lookup(each.value, "sso_last_name", "Pinch")
   }
 
-  account_tags = each.value["tags"]
+  account_tags = lookup(each.value, "tags", {})
 
-  change_management_parameters = each.value["change_management_parameters"]
-  custom_fields = each.value["custom_fields"]
+  change_management_parameters = lookup(each.value, "change_management_parameters", null)
+  custom_fields = lookup(each.value, "custom_fields", null)
 
-  account_customizations_name = each.value["account_customizations_name"]
+  account_customizations_name = lookup(each.value, "account_customizations_name", null)
 }
