@@ -14,7 +14,7 @@ module "requests" {
     AccountEmail = join("", ["info+", each.key, "@inapinch.io"])
     AccountName  = each.key
     ManagedOrganizationalUnit = lookup(each.value, "ou", "Workloads")
-    SSOUserEmail     = join("", ["info+", each.key, "@inapinch.io"])
+    SSOUserEmail     = "info@inapinch.io"
     SSOUserFirstName = "Ina"
     SSOUserLastName  = "Pinch"
   }
