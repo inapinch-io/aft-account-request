@@ -23,7 +23,7 @@ module "requests" {
   change_management_parameters = lookup(each.value, "change_management_parameters", {
     change_reason = "Terraform", change_request_by = "tfc", 
   })
-  custom_fields = lookup(each.value, "custom_fields", null)
+  custom_fields = lookup(each.value, "custom_fields", {})
 
-  account_customizations_name = lookup(each.value, "account_customizations_name", null)
+  account_customizations_name = lookup(each.value, "account_customizations_name", "")
 }
