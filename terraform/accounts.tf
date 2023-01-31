@@ -25,8 +25,4 @@ module "requests" {
   custom_fields = each.value["custom_fields"]
 
   account_customizations_name = each.value["account_customizations_name"]
-
-  depends_on = [
-    aws_organizations_organizational_unit.ous,
-  ]
 }
