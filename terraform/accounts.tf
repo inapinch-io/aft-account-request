@@ -3,7 +3,15 @@
 #
 locals {
   account_groups = [ for path in fileset(path.module, "account_groups/*.yaml") : merge(yamldecode(file(path)), { name = regex("account_groups/([\\w-]+)\\.yaml", path)[0]}) ]
-  accounts = { for account in flatten([ for definition in local.account_groups: [for key, group in merge(lookup(definition, "groups", { global = {} })): merge(group, {name = join("-", [definition["name"], key])}) ] ]): account["name"] => account  }
+  accounts = { 
+    for account in flatten([ 
+      for definition in local.account_groups: [
+        for key, group in lookup(definition, "groups", { global = {} }): 
+          merge(group, {name = join("-", [definition["name"], key])}) 
+        ] 
+      ]): 
+      account["name"] => account  
+  }
 }
 
 module "requests" {
