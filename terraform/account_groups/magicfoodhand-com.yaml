@@ -4,3 +4,5 @@ groups:
     ou: Workloads 
   dev:
     ou: Workloads
+    tags:
+      dev: true
