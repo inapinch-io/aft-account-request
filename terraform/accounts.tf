@@ -3,7 +3,7 @@
 #
 locals {
   account_groups = { for path in fileset(path.module, "account_groups/*.yaml") : regex("account_groups/([\\w-]+)\\.yaml", path)[0] => yamldecode(file(path)) }
-  accounts = { for k,v in local.account_groups: {for group in lookup(v, "groups", ["global"]): "${k}-${group}" => v } }
+  accounts = {for value in flatten([for k,v in local.account_groups: [for group in lookup(v, "groups", ["global"]): merge(v, {name = "${k}-${group}"})]]): value["name"] => value}
 }
 
 module "requests" {
