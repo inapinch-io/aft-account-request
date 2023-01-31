@@ -3,11 +3,11 @@
 #
 locals {
   account_groups = { for path in fileset(path.module, "account_groups/*.yaml") : regex("account_groups/([\\w-]+)\\.yaml", path)[0] => yamldecode(file(path)) }
-  accounts = {for value in flatten([for k,v in local.account_groups: [for group in lookup(v, "groups", ["global"]): merge(v, {name = "${k}-${group}"})]]): value["name"] => value}
+  all_accounts = {for value in flatten([for k,v in local.account_groups: [for group in lookup(v, "groups", ["global"]): merge({name = "${k}-${group}"}, v)]]): value["name"] => value}
 }
 
 module "requests" {
-  for_each = local.accounts
+  for_each = local.all_accounts
   source = "./modules/aft-account-request"
 
   control_tower_parameters = {
