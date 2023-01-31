@@ -1,0 +1,6 @@
+---
+groups:
+  prod:
+    ou: Workloads 
+  dev:
+    ou: Workloads

@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 locals {
-  accounts = { for path in fileset(path.module, "accounts/*.yaml") : regex("accounts/([\\w-]+)\\.yaml", path)[0] => coalesce(yamldecode(file(path)), {}) }
+  account_groups = [ for path in fileset(path.module, "account_groups/*.yaml") : merge(yamldecode(file(path)), { name = regex("account_groups/([\\w-]+)\\.yaml", path)[0]}) ]
+  accounts = { for account in flatten([ for definition in local.account_groups: [for key, group in merge(lookup(definition, "groups", { global = {} })): merge(group, {name = join("-", [definition["name"], key])}) ] ]): account["name"] => account  }
 }
 
 module "requests" {
