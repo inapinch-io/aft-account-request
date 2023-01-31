@@ -34,5 +34,5 @@ module "requests" {
   })
   custom_fields = lookup(each.value, "custom_fields", {})
 
-  account_customizations_name = lookup(each.value, "account_customizations_name", join("-", [lower(lookup(each.value, "ou", "Workloads")), "customizations"])
+  account_customizations_name = lookup(each.value, "account_customizations_name", join("-", [lower(lookup(each.value, "ou", "Workloads")), "customizations"]))
 }
