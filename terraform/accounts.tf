@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 locals {
-  accounts = { for path in fileset(path.module, "accounts/*.yaml") : regex("accounts/([\\w-]+)\\.yaml", path)[0] => yamldecode(file(path)) }
+  accounts = { for path in fileset(path.module, "accounts/*.yaml") : regex("accounts/([\\w-]+)\\.yaml", path)[0] => coalesce(yamldecode(file(path)), {}) }
 }
 
 module "requests" {
