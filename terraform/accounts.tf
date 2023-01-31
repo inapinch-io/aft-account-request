@@ -30,7 +30,7 @@ module "requests" {
   account_tags = lookup(each.value, "tags", {})
 
   change_management_parameters = lookup(each.value, "change_management_parameters", {
-    change_reason = "Terraform", change_request_by = "tfc", 
+    change_reason = "Terraform", change_requested_by = "tfc", 
   })
   custom_fields = lookup(each.value, "custom_fields", {})
 
