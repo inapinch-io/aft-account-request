@@ -23,14 +23,14 @@ module "requests" {
     AccountName  = each.key
     ManagedOrganizationalUnit = lookup(each.value, "ou", "Workloads")
     SSOUserEmail     = lookup(each.value, "sso_email", "info@inapinch.io")
-    SSOUserFirstName = lookup(each.value, "sso_first_name", "Ina")
+    SSOUserFirstName = lookup(each.value, "sso_first_name", "Info")
     SSOUserLastName  = lookup(each.value, "sso_last_name", "Pinch")
   }
 
   account_tags = lookup(each.value, "tags", {})
 
   change_management_parameters = lookup(each.value, "change_management_parameters", {
-    change_reason = "Terraform", change_requested_by = "tfc", 
+    change_reason = "Terraform", change_requested_by = "aft", 
   })
   custom_fields = lookup(each.value, "custom_fields", {})
 
